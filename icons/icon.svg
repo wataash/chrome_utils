@@ -1,0 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2026 Wataru Ashihara <wataash0607@gmail.com>
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="#1976d2"/>
+  <rect x="31" y="29" width="16" height="70" rx="8" fill="white"/><rect x="31" y="29" width="65" height="16" rx="8" fill="white"/><rect x="31" y="83" width="65" height="16" rx="8" fill="white"/>
+</svg>

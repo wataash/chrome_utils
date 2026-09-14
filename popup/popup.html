@@ -1,0 +1,75 @@
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2026 Wataru Ashihara <wataash0607@gmail.com>
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chrome Utils</title>
+    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="songsterr.css">
+    <script src="../shared/features.js" defer></script>
+    <script src="popup.js" defer></script>
+    <script src="songsterr.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Chrome Utils</h1>
+        <p>Feature settings</p>
+      </header>
+
+      <details class="site-settings" data-site="YouTube" data-origin="https://www.youtube.com">
+        <summary>YouTube</summary>
+        <section class="quality" aria-labelledby="quality-title">
+          <h2 id="quality-title">Video quality</h2>
+          <div id="quality-buttons" role="group" aria-label="Select quality"></div>
+          <p id="quality-status" class="description" role="status">Applies to the active YouTube video.</p>
+        </section>
+        <div class="feature-list"></div>
+      </details>
+
+      <details class="site-settings" data-site="Songsterr" data-origin="https://www.songsterr.com">
+        <summary>Songsterr</summary>
+        <div class="songsterr-settings">
+          <div id="songsterr-warn" role="alert"></div>
+          <div id="songsterr-form" hidden>
+            <div class="row"><input type="checkbox" id="songsterr-enabled"><label for="songsterr-enabled">Enabled</label></div>
+            <label for="songsterr-key">Key signature</label>
+            <select id="songsterr-key"></select>
+            <div class="row">
+              <input type="radio" name="songsterr-mode" id="songsterr-major" value="major" checked><label for="songsterr-major">major</label>
+              <input type="radio" name="mode" id="songsterr-minor" value="minor"><label for="songsterr-minor">minor</label>
+            </div>
+            <div class="row"><input type="checkbox" id="songsterr-thisSong"><label for="songsterr-thisSong">Only this song (s<span id="songsterr-songId">?</span>)</label></div>
+            <button class="primary" id="songsterr-save">Save and reload</button>
+            <button class="link" id="songsterr-clearSongs">Clear all song overrides</button>
+            <div id="songsterr-msg" role="status"></div>
+            <div class="note">Key signatures affect Sheet view only. The Tab/Sheet selector is enabled locally.</div>
+          </div>
+        </div>
+      </details>
+
+      <details class="site-settings" data-site="Genius" data-origin="https://genius.com">
+        <summary>Genius</summary>
+        <div class="feature-list"></div>
+      </details>
+    </main>
+
+    <template id="feature-template">
+      <section class="feature">
+        <div class="feature-copy">
+          <label class="title"></label>
+          <p class="description"></p>
+        </div>
+        <label class="switch">
+          <input type="checkbox">
+          <span class="track" aria-hidden="true"></span>
+        </label>
+      </section>
+    </template>
+  </body>
+</html>

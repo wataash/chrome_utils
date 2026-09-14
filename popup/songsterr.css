@@ -1,0 +1,22 @@
+/*
+SPDX-FileCopyrightText: Copyright (c) 2026 Wataru Ashihara <wataash0607@gmail.com>
+SPDX-License-Identifier: Apache-2.0
+*/
+
+.songsterr-settings { padding: 0 20px 18px; font-size: 13px; }
+.songsterr-settings label { display: block; margin: 8px 0 2px; }
+.songsterr-settings select { width: 100%; padding: 4px; }
+.songsterr-settings .row { display: flex; gap: 6px; align-items: center; margin-top: 8px; }
+.songsterr-settings .row label { margin: 0; }
+#songsterr-warn { color: #b3261e; }
+#songsterr-msg { color: #137333; margin-top: 8px; min-height: 1em; }
+.songsterr-settings button.primary { width: 100%; margin-top: 10px; background: #137333; color: #fff; border: none; border-radius: 4px; padding: 8px; cursor: pointer; }
+.songsterr-settings button.link { background: none; border: none; color: inherit; text-decoration: underline; cursor: pointer; margin-top: 8px; font-size: 12px; padding: 0; }
+.songsterr-settings button:disabled { opacity: 0.5; cursor: wait; }
+.songsterr-settings .note { color: #5f6368; font-size: 11px; margin-top: 8px; }
+
+@media (prefers-color-scheme: dark) {
+  #songsterr-warn { color: #f28b82; }
+  #songsterr-msg { color: #81c995; }
+  .songsterr-settings .note { color: #bdc1c6; }
+}

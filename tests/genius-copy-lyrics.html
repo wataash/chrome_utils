@@ -1,0 +1,138 @@
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2026 Wataru Ashihara <wataash0607@gmail.com>
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Genius lyrics copy test</title>
+    <link rel="stylesheet" href="../features/genius/copy-lyrics.css">
+  </head>
+  <body tabindex="-1">
+    <div id="lyrics-root" style="display: grid; grid-template-columns: [left-start] 300px 300px [right-end]">
+      <div id="lyrics-column" class="Lyrics__Container-sc-test-0" style="width: 300px; grid-column: left-start">
+        <div data-lyrics-container="true">
+          <div data-exclude-from-selection="true">Sample Song Lyrics</div>
+          [Verse 1]<br>
+          Sample text for the first line<br>
+          Sample text for the second line<br><br>
+        </div>
+        <div data-lyrics-container="true">
+          [Verse 2]<br>
+          Sample text for another verse
+        </div>
+      </div>
+      <div id="right-sidebar" class="RightSidebar__Container-sc-test-0" style="display: flex">
+        <div id="sidebar-ad-wrapper">
+          <div id="div-gpt-ad-desktop_song_lyrics_sidebar-1"></div>
+        </div>
+      </div>
+      <div id="lyrics-footer" class="LyricsFooter__Container-sc-test-0" style="width: 300px; grid-column: left-start">
+        Embed
+      </div>
+    </div>
+    <div data-exclude-from-selection="true" id="banner-wrapper">
+      <div id="div-gpt-ad-desktop_song_lyrics_inread-1">Advertisement</div>
+    </div>
+    <div id="combined-ad-wrapper">
+      <div><div><div id="div-gpt-ad-desktop_song_combined_leaderboard-1"></div></div></div>
+    </div>
+    <div id="bottom-sticky" class="SongPage__BottomSticky-sc-test-0" style="display: block; height: 80px">
+      <div data-testid="media-player-container">Apple Music</div>
+    </div>
+    <input id="search" value="search text">
+
+    <script>
+      const storageListeners = [];
+      globalThis.chrome = {
+        storage: {
+          local: {
+            get: async (defaults) => defaults,
+          },
+          onChanged: {
+            addListener: (listener) => storageListeners.push(listener),
+          },
+        },
+      };
+
+      function dispatchCopy(target = document.body) {
+        const clipboardData = new DataTransfer();
+        const event = new ClipboardEvent("copy", {
+          bubbles: true,
+          cancelable: true,
+          clipboardData,
+        });
+        target.dispatchEvent(event);
+
+        return {
+          handled: event.defaultPrevented,
+          text: clipboardData.getData("text/plain"),
+        };
+      }
+    </script>
+    <script src="../shared/features.js"></script>
+    <script src="../features/genius/copy-lyrics.js"></script>
+    <script>
+      const promotion = document.createElement("div");
+      promotion.className =
+        "LyricsSidebarAd__RecommendationsContainer-sc-test-0 fixture";
+      promotion.innerHTML = "<aside>You might also like</aside>";
+      document.querySelector("#right-sidebar").append(promotion);
+
+      setTimeout(() => {
+        document.getSelection().removeAllRanges();
+        document.body.focus();
+        const unselected = dispatchCopy();
+        const toast = document.querySelector("[data-chrome-utils-copy-toast]");
+        const toastShown =
+          toast?.textContent === "Lyrics copied to clipboard" &&
+          toast.dataset.visible === "true" &&
+          getComputedStyle(toast).visibility === "visible";
+        const header = document.querySelector(
+          '[data-exclude-from-selection="true"]',
+        );
+        const headerVisible = getComputedStyle(header).display !== "none";
+        const expectedLyrics = [
+          "[Verse 1]",
+          "Sample text for the first line",
+          "Sample text for the second line",
+          "",
+          "[Verse 2]",
+          "Sample text for another verse",
+        ].join("\n");
+
+        const range = document.createRange();
+        range.selectNodeContents(document.querySelector(
+          '[data-lyrics-container="true"]',
+        ));
+        document.getSelection().addRange(range);
+        const selected = dispatchCopy();
+        document.getSelection().removeAllRanges();
+
+        const search = document.querySelector("#search");
+        search.focus();
+        const editable = dispatchCopy(search);
+        search.blur();
+
+        for (const listener of storageListeners) {
+          listener(
+            { "features.genius.copyLyrics": { newValue: false } },
+            "local",
+          );
+        }
+        const disabled = dispatchCopy();
+
+        document.documentElement.dataset.testResult = [
+          `copied:${unselected.handled && unselected.text === expectedLyrics}`,
+          `toastShown:${toastShown}`,
+          `selectionPreserved:${!selected.handled}`,
+          `editablePreserved:${!editable.handled}`,
+          `disabledPreserved:${!disabled.handled}`,
+          `nonPromotionVisible:${headerVisible}`,
+        ].join(",");
+      });
+    </script>
+  </body>
+</html>
